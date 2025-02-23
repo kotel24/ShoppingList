@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "ru.mygames.shoppinglist"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "ru.mygames.shoppinglist"
