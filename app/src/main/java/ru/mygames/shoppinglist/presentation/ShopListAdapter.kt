@@ -16,6 +16,8 @@ class ShopListAdapter:  RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>
             field = value
             notifyDataSetChanged() //вызываем метод для перерисовки вью
         }
+    var onShopItemLongClickListener:((ShopItem)-> Unit)? = null
+    var onShopItemClickListener:((ShopItem)-> Unit)? = null
     //как создавать вью
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopItemViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(
