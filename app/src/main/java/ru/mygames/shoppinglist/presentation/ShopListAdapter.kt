@@ -60,6 +60,11 @@ class ShopListAdapter:  RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>
         val tvCount = view.findViewById<TextView>(R.id.tv_count)
     }
 
+    override fun getItemViewType(position: Int): Int {
+        val item = shopList[position]
+        if (item.enabled) return VIEW_TYPE_ENABLED
+        else return VIEW_TYPE_DISABLED
+    }
 
     companion object {
         const val VIEW_TYPE_ENABLED = 1
