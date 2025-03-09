@@ -26,16 +26,18 @@ class ShopListAdapter:  RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>
             else -> throw RuntimeException("Unknow view type: $viewType")
         }
         val view = LayoutInflater.from(parent.context).inflate(
-            R.layout.item_shop_disabled,
+            layout,
             parent,
             false
         )
         return ShopItemViewHolder(view)
     }
+
     // количество элементов в коллекции
     override fun getItemCount(): Int {
         return shopList.size
     }
+
     //как вставить значение в вью
     override fun onBindViewHolder(holder: ShopItemViewHolder, position: Int) {
         val item = shopList[position]
@@ -52,17 +54,16 @@ class ShopListAdapter:  RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>
         holder.tvCount.text = item.count.toString()
     }
 
-    override fun onViewRecycled(holder: ShopItemViewHolder) {
-        super.onViewRecycled(holder)
-        holder.tvName.text = ""
-        holder.tvCount.text = ""
-        holder.tvName.setTextColor(ContextCompat.getColor(holder.itemView.context, android.R.color.white))
-    }
 
-    class ShopItemViewHolder(view: View) : RecyclerView.ViewHolder(view){
+    class ShopItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvName = view.findViewById<TextView>(R.id.tv_name)
         val tvCount = view.findViewById<TextView>(R.id.tv_count)
     }
 
 
+    companion object {
+        const val VIEW_TYPE_ENABLED = 1
+        const val VIEW_TYPE_DISABLED = 0
+        const val MAX_POOL_SIZE = 15
+}
 }
