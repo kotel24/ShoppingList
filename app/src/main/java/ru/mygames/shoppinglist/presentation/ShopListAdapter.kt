@@ -41,14 +41,15 @@ class ShopListAdapter:  RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>
         val item = shopList[position]
         holder.tvName.text = item.name
         holder.tvCount.text = item.count.toString()
-        holder.itemView.setOnClickListener {
-            //todo: open detail activity with item data
+        holder.itemView.setOnLongClickListener {
+            onShopItemLongClickListener?.invoke(item)
+            true
         }
-        if (item.enabled){
-            holder.tvName.text = item.name
-            holder.tvCount.text = item.count.toString()
-            holder.tvName.setTextColor(ContextCompat.getColor(holder.itemView.context, android.R.color.holo_red_dark))
+        holder.itemView.setOnClickListener{
+            onShopItemClickListener?.invoke(item)
         }
+        holder.tvName.text = item.name
+        holder.tvCount.text = item.count.toString()
     }
 
     override fun onViewRecycled(holder: ShopItemViewHolder) {
