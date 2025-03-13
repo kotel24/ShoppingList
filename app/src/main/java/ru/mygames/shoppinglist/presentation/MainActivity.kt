@@ -1,12 +1,12 @@
 package ru.mygames.shoppinglist.presentation
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.mygames.shoppinglist.R
 
 class MainActivity : AppCompatActivity() {
@@ -20,8 +20,14 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerView()
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.shopList.observe(this){
-            shopListAdapter.shopList = it
+            shopListAdapter.submitList(it)
         }
+        val buttonAddItem = findViewById<FloatingActionButton>(R.id.button_add_shop_item)
+        buttonAddItem.setOnClickListener {
+            val intent = ShopItemActivity.newIntentAddItem(this)
+            startActivity(intent)
+        }
+
     }
     private fun setupRecyclerView() {
         val rvShoplist = findViewById<RecyclerView>(R.id.recyclerView)
@@ -56,7 +62,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val item = shopListAdapter.shopList[viewHolder.adapterPosition]
+                val item = shopListAdapter.currentList[viewHolder.adapterPosition]
                 viewModel.deleteShopItem(item)
             }
 
@@ -66,8 +72,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupOnClickLictener() {
-        shopListAdapter.onShopItemClickListener = {
-            Log.d("MainActivity", "onShopItemClickListener")
+        shopListAdapter.onShopItemClickListener =
+            {
+            val intent = ShopItemActivity.newIntentEditItem(this, it.id)
+            startActivity(intent)
         }
     }
 

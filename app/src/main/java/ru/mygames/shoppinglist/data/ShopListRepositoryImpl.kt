@@ -36,12 +36,12 @@ object ShopListRepositoryImpl: ShopListRepository {
     }
 
     override fun editShopItem(shopItem: ShopItem) {
-        val oldShopItem = getShowItem(shopItem.id)
+        val oldShopItem = getShopItem(shopItem.id)
         deleteShopItem(oldShopItem)
         addShopItem(shopItem)
     }
 
-    override fun getShowItem(shopItemId: Int): ShopItem {
+    override fun getShopItem(shopItemId: Int): ShopItem {
         return shopList.find { it.id == shopItemId } ?: throw RuntimeException("Element with id $shopItemId not found")
     }
 
