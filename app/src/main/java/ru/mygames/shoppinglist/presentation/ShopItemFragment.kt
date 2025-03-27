@@ -13,8 +13,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.textfield.TextInputLayout
 import ru.mygames.shoppinglist.R
 import ru.mygames.shoppinglist.domain.ShopItem
+import ru.mygames.shoppinglist.presentation.ShopItemActivity.OnEditingFinishedListener
 
 class ShopItemFragment :Fragment() {
+    var onEditingFinishedListener: OnEditingFinishedListener? = null
     private lateinit var viewModel: ShopItemViewModel
     private lateinit var tilName: TextInputLayout
     private lateinit var tilCount: TextInputLayout
@@ -61,7 +63,7 @@ class ShopItemFragment :Fragment() {
             tilName.error = message
         }
         viewModel.shouldCloseScreen.observe(viewLifecycleOwner) {
-            requireActivity().onBackPressed()
+            onEditingFinishedListener?.onEditingFinished()
         }
     }
 
