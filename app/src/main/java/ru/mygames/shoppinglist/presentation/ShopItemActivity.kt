@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import ru.mygames.shoppinglist.R
 import ru.mygames.shoppinglist.domain.ShopItem
 
-class ShopItemActivity:AppCompatActivity() {
+class ShopItemActivity:AppCompatActivity(), ShopItemFragment.OnEditingFinishedListener {
     private lateinit var viewModel: ShopItemViewModel
     private var screenMode = MODE_UNKNOWN
     private var shopItemId = ShopItem.UNDEFINED_ID
@@ -46,8 +46,8 @@ class ShopItemActivity:AppCompatActivity() {
         }
     }
 
-    interface OnEditingFinishedListener {
-        fun onEditingFinished()
+    override fun onEditingFinished() {
+        finish()
     }
 
     companion object {

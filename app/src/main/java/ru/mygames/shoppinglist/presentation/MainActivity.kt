@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.mygames.shoppinglist.R
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedListener {
     private lateinit var viewModel: MainViewModel
     private var shopItemContainer:FragmentContainerView? = null
     private lateinit var shopListAdapter: ShopListAdapter
@@ -39,10 +39,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-//    override fun onEditingFinished() {
-//        Toast.makeText(this@MainActivity,"Success" ,Toast.LENGTH_SHORT).show()
-//        supportFragmentManager.popBackStack()
-//    }
+    override fun onEditingFinished() {
+        Toast.makeText(this@MainActivity,"Success" ,Toast.LENGTH_SHORT).show()
+        supportFragmentManager.popBackStack()
+    }
 
     private fun isOnePaneMode(): Boolean {
         return shopItemContainer == null

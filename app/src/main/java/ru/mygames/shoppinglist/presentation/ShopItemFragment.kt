@@ -1,5 +1,6 @@
 package ru.mygames.shoppinglist.presentation
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,10 +14,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.textfield.TextInputLayout
 import ru.mygames.shoppinglist.R
 import ru.mygames.shoppinglist.domain.ShopItem
-import ru.mygames.shoppinglist.presentation.ShopItemActivity.OnEditingFinishedListener
 
 class ShopItemFragment :Fragment() {
-    var onEditingFinishedListener: OnEditingFinishedListener? = null
+    private lateinit var onEditingFinishedListener: OnEditingFinishedListener
     private lateinit var viewModel: ShopItemViewModel
     private lateinit var tilName: TextInputLayout
     private lateinit var tilCount: TextInputLayout
@@ -25,6 +25,15 @@ class ShopItemFragment :Fragment() {
     private lateinit var buttonSave: Button
     private var screenMode:String = MODE_UNKNOWN
     private var shopItemId:Int = ShopItem.UNDEFINED_ID
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnEditingFinishedListener) {
+            onEditingFinishedListener = context
+        } else {
+            throw RuntimeException("Activity must implement OnEditingFinishedListener")
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +72,7 @@ class ShopItemFragment :Fragment() {
             tilName.error = message
         }
         viewModel.shouldCloseScreen.observe(viewLifecycleOwner) {
-            onEditingFinishedListener?.onEditingFinished()
+            onEditingFinishedListener.onEditingFinished()
         }
     }
 
@@ -145,6 +154,9 @@ class ShopItemFragment :Fragment() {
         buttonSave = view.findViewById(R.id.save_button)
     }
 
+    interface OnEditingFinishedListener {
+        fun onEditingFinished()
+    }
 
     companion object {
         const val MODE_UNKNOWN = ""
