@@ -2,6 +2,7 @@ package ru.mygames.shoppinglist.data
 
 import android.app.Application
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import ru.mygames.shoppinglist.data.mapper.toDbModel
 import ru.mygames.shoppinglist.data.mapper.toEntity
@@ -18,8 +19,10 @@ class ShopListRepositoryImpl(
         shopListDao.addShopItem(shopItem.toDbModel())
     }
 
-    override fun getShopList(): LiveData<List<ShopItem>> {
-        return shopListDao.getShopList()
+    override fun getShopList(): LiveData<List<ShopItem>> = MediatorLiveData<List<ShopItem>>().apply {
+        addSource(shopListDao.getShopList()){
+            value = it.toEntity()
+        }
     }
 
     override fun deleteShopItem(shopItem: ShopItem) {
