@@ -1,15 +1,21 @@
 package ru.mygames.shoppinglist.presentation
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import ru.mygames.shoppinglist.data.ShopListRepositoryImpl
 import ru.mygames.shoppinglist.domain.ShopItem
 import ru.mygames.shoppinglist.domain.UseCaseDeleteShopItem
 import ru.mygames.shoppinglist.domain.UseCaseEditShopItem
 import ru.mygames.shoppinglist.domain.UseCaseGetShopList
 
-class MainViewModel:ViewModel() {
+class MainViewModel(application: Application): AndroidViewModel(application) {
 
-    private val repository = ShopListRepositoryImpl
+    private val repository = ShopListRepositoryImpl(application)
     private val getShopList = UseCaseGetShopList(repository)
     private val deleteShopItem = UseCaseDeleteShopItem(repository)
     private val editGhopItem = UseCaseEditShopItem(repository)
@@ -18,11 +24,16 @@ class MainViewModel:ViewModel() {
 
 
     fun deleteShopItem(shopItem: ShopItem){
-        deleteShopItem.deleteShopItem(shopItem)
+        viewModelScope.launch {
+            deleteShopItem.deleteShopItem(shopItem)
+        }
     }
 
     fun editShopItem(shopItem: ShopItem){
         val newItem = shopItem.copy(enabled = !shopItem.enabled)
-        editGhopItem.editShopItem(newItem)
+        viewModelScope.launch {
+            editGhopItem.editShopItem(newItem)
+        }
     }
+
 }
